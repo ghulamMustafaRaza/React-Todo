@@ -1,0 +1,17 @@
+.todoTask{
+    list-style-type: none;
+    padding:0;
+    margin:0;
+}
+.todoTask>li{
+    margin:10px;
+    display: flex;
+    align-items: center;
+}
+.todoTask>li>.col-xs-8{
+    display: flex;
+    align-items: center;
+}
+.todoTask>li>.col-xs-8>*{
+    margin:10px;
+}
