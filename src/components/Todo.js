@@ -1,7 +1,9 @@
-import React from "react"
-import AddTodo from "./AddTodo"
-import Task from "./Task"
+import React from "react";
+import AddTodo from "./AddTodo";
+import Task from "./Task";
+import * as firebase from "firebase";
 
+// const dbRef = firebase.database().ref().child('react');
 
 class Todo extends React.Component{
     constructor(props){
@@ -10,10 +12,21 @@ class Todo extends React.Component{
             todos: []
         }
     }
+    componentDidMount(){
+        var dbRef = firebase.database().ref().child('react');
+        const stateRef = dbRef.child('state');
+        // alert(stateRef)
+        stateRef.on('value', state=>{
+            console.log(state.val())
+            this.setState(state.val())
+        },err=>{console.log(err)})
+    }
     handleAdd(text){
+        var newTodo = [...this.state.todos,{text:text,done:false}];
         this.setState({
-            todos: [...this.state.todos,{text:text,done:false}]
+            todos: newTodo
         })
+        this.saveToFirebase({...this.state,todos:newTodo})
     }
     removeTodo(index){
         var newTodo = [...this.state.todos];
@@ -21,20 +34,28 @@ class Todo extends React.Component{
         this.setState({
             todos: newTodo
         })
+        this.saveToFirebase({...this.state,todos:newTodo})            
+    }
+    saveToFirebase(data){
+        var dbRef = firebase.database().ref().child('react');  
+        console.log(this.state)      
+        dbRef.child('state').set(data)
     }
     handleChaked(ind){
         var newTodo = [...this.state.todos];
         newTodo[ind].done = !newTodo[ind].done;
         this.setState({
             todos: newTodo
-        })       
+        });
+        this.saveToFirebase({...this.state,todos:newTodo})        
     }
     handleEdit(ind,text){
         var newTodo = [...this.state.todos];
         newTodo[ind].text = text;
         this.setState({
             todos: newTodo
-        }) 
+        })
+        this.saveToFirebase({...this.state,todos:newTodo})
     }
     render(){
         return(
