@@ -9,14 +9,16 @@ class Todo extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            todos: []
+            todos: [],
+            res: false
         }
     }
-    componentDidMount(){
+    componentWillMount(){
         var dbRef = firebase.database().ref().child('react');
         const stateRef = dbRef.child('state');
         // alert(stateRef)
         stateRef.on('value', state=>{
+            this.setState({res: true})
             console.log(state.val())
             this.setState(state.val())
         },err=>{console.log(err)})
@@ -30,7 +32,7 @@ class Todo extends React.Component{
     }
     removeTodo(index){
         var newTodo = [...this.state.todos];
-        newTodo.splice(index,index+1)
+        newTodo.splice(index,1)
         this.setState({
             todos: newTodo
         })
@@ -61,7 +63,7 @@ class Todo extends React.Component{
         return(
             <div>
                 <AddTodo handleAdd={this.handleAdd.bind(this)}></AddTodo>
-                <Task todos={this.state.todos} handleChaked={this.handleChaked.bind(this)} remove={this.removeTodo.bind(this)} ></Task>
+                <Task handleEdit={this.handleEdit.bind(this)} response={this.state.res} todos={this.state.todos} handleChaked={this.handleChaked.bind(this)} remove={this.removeTodo.bind(this)} ></Task>
             </div>
         )
     }

@@ -1,3 +1,6 @@
+body{
+    background-color: #eee;
+}
 .todoTask{
     list-style-type: none;
     padding:0;
@@ -8,10 +11,10 @@
     display: flex;
     align-items: center;
 }
-.todoTask>li>.col-xs-8{
+.todoTask>li>.col-xs-6{
     display: flex;
     align-items: center;
 }
-.todoTask>li>.col-xs-8>*{
-    margin:10px;
+.todoTask>li>.col-xs-6>*{
+    margin:5px;
 }
